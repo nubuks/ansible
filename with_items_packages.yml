@@ -1,0 +1,15 @@
+---
+- hosts: webservers
+  become: true
+  tasks: 
+  - name: Install packages
+    yum:
+      name: "{{item}}"
+      state: installed
+    with_items:
+      - git
+      - make
+      - telnet
+      - gzip
+      - wget
+      - tree

@@ -1,0 +1,38 @@
+---
+- name: Install and Setup Tomcat Server in all Managed Nodes
+  hosts: all
+  become: true
+  tasks:
+  - name: Install Java on RedHat
+    yum:
+      name: java
+      state: installed
+    when: ansible_os_family == "RedHat"
+
+  - name: Install Java on Debian
+    apt:
+      name: default-jdk
+      state: present
+    when: ansible_os_family == "Debian"
+
+  - name: Download Tomcat Server packages
+    get_url:
+      url: https://downloads.apache.org/tomcat/tomcat-8/v8.5.53/bin/apache-tomcat-8.5.53.tar.gz
+      dest: /opt
+
+  - name: Unarchive Tomcat Server tar file
+    unarchive:
+      src: /opt/apache-tomcat-8.5.53.tar.gz
+      dest: /opt
+      remote_src: yes
+
+  - name: Add execution permissions on startup.sh
+    file:
+      path: /opt/apache-tomcat-8.5.53/bin/startup.sh
+      mode: 0777
+
+  - name: Start Tomcat Servers
+    shell: nohup ./startup.sh
+    args:
+      chdir: /opt/apache-tomcat-8.5.53/bin
+

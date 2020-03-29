@@ -1,0 +1,14 @@
+---
+- name: Install apache2on Ubuntu Managed Node
+  hosts: dbservers
+  become: true
+  tasks:
+  - name: Install apache2 package
+    apt:
+      name: Apache2
+      state: present
+
+  - name: Start apache2 package
+    service:
+      name: apache2
+      state: started

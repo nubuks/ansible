@@ -1,0 +1,6 @@
+---
+- name: Run ansible apache role
+  hosts: all
+  become: true
+  roles: 
+    - setup-apache
